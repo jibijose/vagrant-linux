@@ -17,6 +17,11 @@ do
 done
 
 function setupSSH {
+	if [ $TOTAL_NODES == 1 ]
+	then
+		echo "Skipping root ssh setup for single node"
+		return 0
+	fi
 	echo "modifying root ssh authorized key files"
 	for i in $(seq 1 $TOTAL_NODES)
 	do

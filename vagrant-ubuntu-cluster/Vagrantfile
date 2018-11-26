@@ -39,6 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			
 			node.vm.provision "shell", inline: "apt-get update -qq"
 			node.vm.provision "shell", inline: "apt-get install -y -qq sshpass"
+			node.vm.provision "shell", inline: "apt-get install -y -qq wget"
 			
 			node.vm.provision "shell", path: "../unix-scripts/ubuntu/setup-ubuntu-root-vms.sh"
 			node.vm.provision "shell", path: "../unix-scripts/ubuntu/setup-ubuntu-vagrant-vms.sh", privileged:false

@@ -31,6 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             eval File.read(import_vagrantfile) if File.exists?(import_vagrantfile)
 			
 			node.vm.provision "shell", inline: "yum install -y -q -e 0 sshpass"
+			node.vm.provision "shell", inline: "yum install -y -q -e 0 wget"
 			
 			node.vm.provision "shell", path: "../unix-scripts/centos/setup-centos-root-vms.sh"
 			node.vm.provision "shell", path: "../unix-scripts/centos/setup-centos-vagrant-vms.sh", privileged:false

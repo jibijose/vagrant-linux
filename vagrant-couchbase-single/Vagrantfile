@@ -6,3 +6,23 @@ CUSTOM_NODE_MEMORY=4096
 CUSTOM_NODE_CPU=2
 
 load '../vagrant-centos-cluster/Vagrantfile'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+	config.vm.network "forwarded_port", guest: 8091, host: 8091
+	config.vm.network "forwarded_port", guest: 8092, host: 8092
+	config.vm.network "forwarded_port", guest: 8093, host: 8093
+	config.vm.network "forwarded_port", guest: 11207, host: 11207
+	config.vm.network "forwarded_port", guest: 11210, host: 11210
+	config.vm.network "forwarded_port", guest: 11211, host: 11211
+	config.vm.network "forwarded_port", guest: 18091, host: 18091
+	config.vm.network "forwarded_port", guest: 18092, host: 18092
+
+	r = NUM_OF_NODES..1
+	(r.first).downto(r.last).each do |i|
+		config.vm.define "#{NAME}" do |node|
+			node.vm.provision "shell", path: "scripts/install-couchbase.sh"
+			node.vm.provision "shell", path: "scripts/setup-couchbase.sh"
+		end
+	end
+end

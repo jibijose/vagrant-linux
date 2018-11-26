@@ -17,6 +17,11 @@ do
 done
 
 function setupHosts {
+	if [ $TOTAL_NODES == 1 ]
+	then
+		echo "Skipping hosts setup for single node"
+		return 0
+	fi
 	echo "modifying /etc/hosts file"
 	for i in $(seq 1 $TOTAL_NODES)
 	do
