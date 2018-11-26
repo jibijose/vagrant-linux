@@ -1,0 +1,14 @@
+ipblock1 = NODE_START_IP.inspect().split(".")[0].split("\"")[1]
+ipblock2 = NODE_START_IP.inspect().split(".")[1]
+ipblock3 = NODE_START_IP.inspect().split(".")[2]
+ipblock4 = NODE_START_IP.inspect().split(".")[3].split("\"")[0]
+
+ipblock4new = ipblock4.to_i + i.to_i
+ip = ipblock1 + "." + ipblock2 + "." + ipblock3 + "." + ipblock4new.to_s
+node.vm.network :private_network, ip: "#{ip}"
+
+sshport = 2000
+sshportnew = sshport + i.to_i
+node.vm.network :forwarded_port, guest: 22, host: "#{sshportnew}", id: "ssh"
+
+node.vm.hostname = "#{NODE_NAME}#{i}"

@@ -1,0 +1,53 @@
+Vagrant.require_version ">= 1.4.3"
+VAGRANTFILE_API_VERSION = "2"
+NUM_OF_NODES=2
+NODE_NAME="nodedocker"
+NODE_START_IP="192.168.56.80"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+	r = NUM_OF_NODES..1
+	(r.first).downto(r.last).each do |i|
+		config.vm.define "#{NODE_NAME}#{i}" do |node|
+			node.vm.box = "centos/7"
+			node.vm.box_check_update = false
+			node.vm.provider "virtualbox" do |v|
+			  v.name = "#{NODE_NAME}#{i}"
+			  v.customize ["modifyvm", :id, "--memory", "512"]
+			  v.customize ["modifyvm", :id, "--groups", "/VagrantLinux"]
+			  v.customize ["modifyvm", :id, "--usb", "on"]
+			  v.customize ["modifyvm", :id, "--usbehci", "off"]
+			end
+			
+			import_vagrantfile = File.expand_path('../../vagrant-scripts/Vagrantfile.common.import', __FILE__)
+            eval File.read(import_vagrantfile) if File.exists?(import_vagrantfile)
+			
+			node.vm.provision "shell", inline: "yum install -y -q -e 0 sshpass"
+			
+			node.vm.provision "shell", path: "../unix-scripts/centos/setup-centos-root-vms.sh"
+			node.vm.provision "shell", path: "../unix-scripts/centos/setup-centos-vagrant-vms.sh", privileged:false
+		end
+	end
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+	r = NUM_OF_NODES..1
+	(r.first).downto(r.last).each do |i|
+	    config.vm.define "#{NODE_NAME}#{i}" do |node|
+	        node.vm.provision "shell" do |s|
+				s.path = "../unix-scripts/setup-root-hosts.sh"
+				s.args = "-t #{NUM_OF_NODES} -n #{NODE_NAME} -i #{NODE_START_IP}"
+			end
+			if i == 1
+			    node.vm.provision "shell" do |s|
+				  s.path = "../unix-scripts/centos/setup-centos-root-ssh.sh"
+				  s.args = "-t #{NUM_OF_NODES} -n #{NODE_NAME} -i #{NODE_START_IP}"
+			    end
+				node.vm.provision "shell" do |s|
+				  s.path = "../unix-scripts/centos/setup-centos-vagrant-ssh.sh"
+				  s.privileged = false
+				  s.args = "-t #{NUM_OF_NODES} -n #{NODE_NAME} -i #{NODE_START_IP}"
+			    end
+			end
+		end		
+	end
+end
