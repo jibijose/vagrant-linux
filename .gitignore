@@ -1,0 +1,12 @@
+**/target/
+**/.settings
+**/.project
+**/.classpath
+**/config
+
+**/.vagrant
+
+**/*.log
+
+**/mastertoken.txt
+**/masterhash.txt
