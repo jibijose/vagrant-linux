@@ -1,20 +1,25 @@
 Vagrant.require_version ">= 1.4.3"
 VAGRANTFILE_API_VERSION = "2"
-NUM_OF_NODES=2
-NODE_NAME="centos"
-NODE_START_IP="192.168.56.90"
-NODE_SSHPORT_START=2090
-NODE_MEMORY = 512
-NODE_CPU = 1
+NUM_OF_NODES = defined?(CUSTOM_NUM_OF_NODES) ? CUSTOM_NUM_OF_NODES : 1
+NODE_NAME = defined?(CUSTOM_NODE_NAME) ? CUSTOM_NODE_NAME : "node"
+NODE_START_IP = defined?(CUSTOM_NODE_START_IP) ? CUSTOM_NODE_START_IP : "192.168.56.100"
+NODE_SSHPORT_START = defined?(CUSTOM_NODE_SSHPORT_START) ? CUSTOM_NODE_SSHPORT_START : 2000
+NODE_MEMORY = defined?(CUSTOM_NODE_MEMORY) ? CUSTOM_NODE_MEMORY : 1024
+NODE_CPU = defined?(CUSTOM_NODE_CPU) ? CUSTOM_NODE_CPU : 1
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	r = NUM_OF_NODES..1
 	(r.first).downto(r.last).each do |i|
-		config.vm.define "#{NODE_NAME}#{i}" do |node|
+	    if NUM_OF_NODES == 1
+		  NAME = "#{NODE_NAME}"
+	    else
+		  NAME = "#{NODE_NAME}#{i}"
+	    end
+		config.vm.define "#{NAME}" do |node|
 			node.vm.box = "centos/7"
 			node.vm.box_check_update = false
 			node.vm.provider "virtualbox" do |v|
-			  v.name = "#{NODE_NAME}#{i}"
+			  v.name = "#{NAME}"
 			  v.customize ["modifyvm", :id, "--memory", "#{NODE_MEMORY}"]
 			  v.customize ["modifyvm", :id, "--cpus", "#{NODE_CPU}"]
 			  v.customize ["modifyvm", :id, "--groups", "/VagrantLinux"]
@@ -36,7 +41,7 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	r = NUM_OF_NODES..1
 	(r.first).downto(r.last).each do |i|
-	    config.vm.define "#{NODE_NAME}#{i}" do |node|
+	    config.vm.define "#{NAME}" do |node|
 	        node.vm.provision "shell" do |s|
 				s.path = "../unix-scripts/setup-root-hosts.sh"
 				s.args = "-t #{NUM_OF_NODES} -n #{NODE_NAME} -i #{NODE_START_IP}"
