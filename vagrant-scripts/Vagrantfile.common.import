@@ -7,7 +7,7 @@ ipblock4new = ipblock4.to_i + i.to_i
 ip = ipblock1 + "." + ipblock2 + "." + ipblock3 + "." + ipblock4new.to_s
 node.vm.network :private_network, ip: "#{ip}"
 
-sshport = 2000
+sshport = NODE_SSHPORT_START
 sshportnew = sshport + i.to_i
 node.vm.network :forwarded_port, guest: 22, host: "#{sshportnew}", id: "ssh"
 
