@@ -1,0 +1,73 @@
+---
+- name: Ensure Base Kubernetes softwares
+  become: yes
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl']
+    state: latest
+  tags:
+    - k8s
+
+- name: Ensure Google Cloud Apt Key
+  become: yes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  tags:
+    - k8s
+
+- name: Ensure Kubernetes Repository
+  become: yes
+  apt_repository:
+    repo: 'deb https://apt.kubernetes.io/ kubernetes-xenial main'
+    state: present
+    update_cache: yes
+  tags:
+    - k8s
+
+- name: Ensure kubernetes softwares
+  become: yes
+  apt:
+    name: ['kubelet', 'kubeadm', 'kubectl', 'kubernetes-cni']
+    state: latest
+  tags:
+    - k8s
+- name: Ensure Docker softwares
+  become: yes
+  apt:
+    name: ['kubelet', 'kubeadm', 'kubectl', 'kubernetes-cni']
+    state: latest
+  tags:
+    - k8s
+
+- name: Ensure Base Docker softwares
+  become: yes
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+    state: latest
+  tags:
+    - k8s
+
+- name: Ensure Docker Apt Key
+  become: yes
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  tags:
+    - k8s
+
+- name: Ensure Docker Repository
+  become: yes
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+    state: present
+    update_cache: yes
+  tags:
+    - k8s
+
+- name: Ensure Docker softwares
+  become: yes
+  apt:
+    name: ['docker-ce']
+    state: latest
+  tags:
+    - k8s

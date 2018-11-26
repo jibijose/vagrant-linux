@@ -1,0 +1,21 @@
+docker-machine stop
+docker-machine start
+
+
+#foreground
+docker run -i -t jibijose/springwebapp
+
+#background
+docker run -d jibijose/springwebapp
+
+docker run -it jibijose/springwebapp /bin/sh
+
+
+docker ps -a
+docker inspect INSTANCE_ID
+docker exec -i -t CONTAINER_NAME /bin/sh
+
+https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+#docker stop $(docker ps -a -q)
+#docker rm $(docker ps -a -q)
+docker system prune

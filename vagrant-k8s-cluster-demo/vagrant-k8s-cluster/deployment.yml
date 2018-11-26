@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: springwebapp-deployment
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: springwebapp
+    spec:
+      containers:
+      - name: springwebapp
+        image: registry.hub.docker.com/jibijose/springwebapp:1.0
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          timeoutSeconds: 1
