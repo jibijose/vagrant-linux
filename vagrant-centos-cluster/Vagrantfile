@@ -10,16 +10,11 @@ NODE_CPU = defined?(CUSTOM_NODE_CPU) ? CUSTOM_NODE_CPU : 1
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	r = NUM_OF_NODES..1
 	(r.first).downto(r.last).each do |i|
-	    if NUM_OF_NODES == 1
-		  NAME = "#{NODE_NAME}"
-	    else
-		  NAME = "#{NODE_NAME}#{i}"
-	    end
-		config.vm.define "#{NAME}" do |node|
+		config.vm.define "#{NODE_NAME}#{i}" do |node|
 			node.vm.box = "centos/7"
 			node.vm.box_check_update = false
 			node.vm.provider "virtualbox" do |v|
-			  v.name = "#{NAME}"
+			  v.name = "#{NODE_NAME}#{i}"
 			  v.customize ["modifyvm", :id, "--memory", "#{NODE_MEMORY}"]
 			  v.customize ["modifyvm", :id, "--cpus", "#{NODE_CPU}"]
 			  v.customize ["modifyvm", :id, "--groups", "/VagrantLinux"]
@@ -42,7 +37,7 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	r = NUM_OF_NODES..1
 	(r.first).downto(r.last).each do |i|
-	    config.vm.define "#{NAME}" do |node|
+	    config.vm.define "#{NODE_NAME}#{i}" do |node|
 	        node.vm.provision "shell" do |s|
 				s.path = "../unix-scripts/setup-root-hosts.sh"
 				s.args = "-t #{NUM_OF_NODES} -n #{NODE_NAME} -i #{NODE_START_IP}"

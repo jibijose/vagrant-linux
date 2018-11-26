@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	r = NUM_OF_NODES..1
 	(r.first).downto(r.last).each do |i|
-		config.vm.define "#{NAME}" do |node|
+		config.vm.define "#{NODE_NAME}#{i}" do |node|
 			node.vm.provision "shell", path: "scripts/install-couchbase.sh"
 			node.vm.provision "shell", path: "scripts/setup-couchbase.sh"
 		end

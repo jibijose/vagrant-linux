@@ -5,18 +5,10 @@ ipblock4 = NODE_START_IP.inspect().split(".")[3].split("\"")[0]
 
 sshport = NODE_SSHPORT_START
 
-if NUM_OF_NODES == 1
-    ipblock4new = ipblock4.to_i
-    ip = ipblock1 + "." + ipblock2 + "." + ipblock3 + "." + ipblock4new.to_s
-    node.vm.network :private_network, ip: "#{ip}"
-    sshportnew = sshport
-    node.vm.network :forwarded_port, guest: 22, host: "#{sshportnew}", id: "ssh"
-else
-    ipblock4new = ipblock4.to_i + i.to_i
-    ip = ipblock1 + "." + ipblock2 + "." + ipblock3 + "." + ipblock4new.to_s
-    node.vm.network :private_network, ip: "#{ip}"
-    sshportnew = sshport + i.to_i
-    node.vm.network :forwarded_port, guest: 22, host: "#{sshportnew}", id: "ssh"
-end
+ipblock4new = ipblock4.to_i + i.to_i
+ip = ipblock1 + "." + ipblock2 + "." + ipblock3 + "." + ipblock4new.to_s
+node.vm.network :private_network, ip: "#{ip}"
+sshportnew = sshport + i.to_i
+node.vm.network :forwarded_port, guest: 22, host: "#{sshportnew}", id: "ssh"
 
-node.vm.hostname = "#{NAME}"
+node.vm.hostname = "#{NODE_NAME}#{i}"
