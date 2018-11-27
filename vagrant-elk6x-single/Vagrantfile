@@ -1,0 +1,27 @@
+CUSTOM_NUM_OF_NODES=1
+CUSTOM_NODE_NAME="elk6x"
+CUSTOM_NODE_START_IP="192.168.56.10"
+CUSTOM_NODE_SSHPORT_START=2000
+CUSTOM_NODE_MEMORY=6144
+CUSTOM_NODE_CPU=2
+
+load '../vagrant-ubuntu-cluster/Vagrantfile'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+	config.vm.network "forwarded_port", guest: 9300, host: 9300
+	config.vm.network "forwarded_port", guest: 9200, host: 9200
+	config.vm.network "forwarded_port", guest: 5601, host: 5601
+
+	r = NUM_OF_NODES..1
+	(r.first).downto(r.last).each do |i|
+		config.vm.define "#{NODE_NAME}#{i}" do |node|
+			node.vm.provision "shell", path: "scripts/install_jdk8.sh"
+			node.vm.provision "shell", path: "scripts/install_elasticsearch.sh"
+			node.vm.provision "shell", path: "scripts/install_logstash.sh"
+			node.vm.provision "shell", path: "scripts/install_kibana.sh.sh"
+			node.vm.provision "shell", path: "scripts/install_metricbeat.sh"
+			node.vm.provision "shell", path: "scripts/setup_logstash.sh"
+		end
+	end
+end
