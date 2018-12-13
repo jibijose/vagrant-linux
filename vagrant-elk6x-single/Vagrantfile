@@ -19,7 +19,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			node.vm.provision "shell", path: "scripts/install_jdk8.sh"
 			node.vm.provision "shell", path: "scripts/install_elasticsearch.sh"
 			node.vm.provision "shell", path: "scripts/install_logstash.sh"
-			node.vm.provision "shell", path: "scripts/install_kibana.sh.sh"
+			node.vm.provision "shell", path: "scripts/install_kibana.sh"
 			node.vm.provision "shell", path: "scripts/install_metricbeat.sh"
 			node.vm.provision "shell", path: "scripts/setup_logstash.sh"
 		end
