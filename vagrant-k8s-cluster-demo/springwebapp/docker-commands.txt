@@ -3,12 +3,12 @@ docker-machine start
 
 
 #foreground
-docker run -i -t jibijose/springwebapp
+docker run -p 8080:8080 -i -t jibijose/springwebapp:1.0
 
 #background
-docker run -d jibijose/springwebapp
+docker run -d jibijose/springwebapp:1.0
 
-docker run -it jibijose/springwebapp /bin/sh
+docker run -it jibijose/springwebapp:1.0 /bin/sh
 
 
 docker ps -a
